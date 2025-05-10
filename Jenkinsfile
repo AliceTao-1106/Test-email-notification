@@ -4,6 +4,7 @@ pipeline {
     environment {
         RECIPIENT = 'taoalice1@gmail.com'
         SENDER = 'Alice Tao <taoalice1@gmail.com>'
+        SNYK_TOKEN = credentials('SNYK_TOKEN')
     }
 
     stages {

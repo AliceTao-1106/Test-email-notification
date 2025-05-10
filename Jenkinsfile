@@ -4,7 +4,7 @@ pipeline {
     environment {
         RECIPIENT = 'taoalice1@gmail.com'
         SENDER = 'Alice Tao <taoalice1@gmail.com>'
-        SNYK_TOKEN = credentials('SNYK_TOKEN')
+        SNYK_TOKEN = credentials('SNYK_TOKEN') // Ensure this credential is added in Jenkins
     }
 
     stages {
@@ -12,14 +12,14 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the project using Maven...'
-                sh 'mvn clean package > build.log || true' // Maven
+                sh 'mvn clean package > build.log || true' // Tool: Maven
             }
         }
 
         stage('Unit and Integration Tests') {
             steps {
                 echo 'Running unit and integration tests with Jest...'
-                sh 'npm test > test.log || true' // Jest
+                sh 'npm test > test.log || true' // Tool: Jest
             }
             post {
                 always {
@@ -37,8 +37,8 @@ pipeline {
 
         stage('Security Scan') {
             steps {
-                echo 'Performing security scan with npm audit...'
-                sh 'npm audit > audit.log || true' // npm audit
+                echo 'Performing security scan using Snyk...'
+                sh 'export SNYK_TOKEN=${SNYK_TOKEN} && snyk test > audit.log || true' // Tool: Snyk
             }
             post {
                 always {
@@ -46,7 +46,7 @@ pipeline {
                         to: "${env.RECIPIENT}",
                         from: "${env.SENDER}",
                         subject: "Security Scan - ${currentBuild.currentResult}",
-                        body: "Security scan completed. Check the attached audit report.",
+                        body: "Security scan completed using Snyk. See attached audit report.",
                         attachmentsPattern: 'audit.log',
                         mimeType: 'text/plain'
                     )

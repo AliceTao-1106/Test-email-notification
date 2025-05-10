@@ -38,7 +38,7 @@ pipeline {
         stage('Security Scan') {
             steps {
                 echo 'Performing security scan using Snyk...'
-                sh 'export SNYK_TOKEN=${SNYK_TOKEN} && snyk-scan > audit.log || true' // Tool: Snyk
+                sh 'export SNYK_TOKEN=${SNYK_TOKEN} && snyk test > audit.log || true' // Tool: Snyk
             }
             post {
                 always {

@@ -4,7 +4,7 @@ pipeline {
     environment {
         RECIPIENT = 'taoalice1@gmail.com'
         SENDER = 'Alice Tao <taoalice1@gmail.com>'
-        SNYK_TOKEN = credentials('SNYK_TOKEN') // Ensure this credential is added in Jenkins
+        SNYK_TOKEN = credentials('SNYK_TOKEN') 
     }
 
     stages {
@@ -12,7 +12,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the project using Maven...'
-                sh 'mvn clean package > build.log || true' // Tool: Maven
+                sh '/opt/homebrew/bin/mvn clean package > build.log || true' // Tool: Maven
             }
         }
 
@@ -38,7 +38,7 @@ pipeline {
         stage('Security Scan') {
             steps {
                 echo 'Performing security scan using Snyk...'
-                sh 'export SNYK_TOKEN=${SNYK_TOKEN} && snyk test > audit.log || true' // Tool: Snyk
+                sh 'export SNYK_TOKEN=${SNYK_TOKEN} && snyk-scan > audit.log || true' // Tool: Snyk
             }
             post {
                 always {

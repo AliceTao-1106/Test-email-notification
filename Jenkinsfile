@@ -19,7 +19,7 @@ pipeline {
         stage('Unit and Integration Tests') {
             steps {
                 echo 'Running unit and integration tests with Jest...'
-                sh 'npm test > test.log || true' // Tool: Jest
+                sh 'npm test > test.log 2>&1 || true' // Tool: Jest
             }
             post {
                 always {
